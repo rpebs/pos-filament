@@ -4,10 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Category;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -16,6 +19,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,6 +36,23 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->required(),
+                Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->options(
+                        Category::all()->pluck('name', 'id'),
+                    )
+                    ->searchable()
+                    ->createOptionForm(
+                        [
+                            TextInput::make('name')
+                                ->required()
+                                ->columns(1)
+                                ->autofocus(),
+                            Hidden::make('created_by')
+                                ->default(auth()->user()->name),
+                        ]
+                    )
                     ->required(),
                 TextInput::make('price')
                     ->required()
@@ -56,7 +77,9 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                ->searchable(),
+                    ->searchable(),
+                TextColumn::make('category.name')
+                    ->sortable(),
                 TextColumn::make('price')
                     ->sortable()
                     ->money('IDR'),
@@ -69,6 +92,10 @@ class ProductResource extends Resource
             ])
             ->filters([
                 TrashedFilter::make(),
+                SelectFilter::make('category_id')
+                    ->options(
+                        Category::all()->pluck('name', 'id')
+                    )
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

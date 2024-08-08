@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('total_price');
             $table->integer('amount_given')->nullable();
             $table->integer('change')->nullable();
+            $table->string('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
             $table->integer('price');
+            $table->string('created_by')->nullable();
             $table->timestamps();
         });
     }

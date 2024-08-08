@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransactionResource\Pages;
 use App\Filament\Resources\TransactionResource\RelationManagers;
+use App\Filament\Widgets\TransactionTable;
 use App\Models\Product;
 use App\Models\Transaction;
 use Filament\Forms;
@@ -190,6 +191,13 @@ class TransactionResource extends Resource
             'index' => Pages\ListTransactions::route('/'),
             'create' => Pages\CreateTransaction::route('/create'),
             'edit' => Pages\EditTransaction::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            TransactionTable::class
         ];
     }
 }

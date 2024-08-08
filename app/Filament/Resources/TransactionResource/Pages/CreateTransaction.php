@@ -18,6 +18,7 @@ class CreateTransaction extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $products = $data['products'];
+        $data['created_by'] = auth()->user()->name;
 
         // Check if stock is sufficient
         foreach ($products as $product) {
@@ -69,6 +70,7 @@ class CreateTransaction extends CreateRecord
                 $this->record->products()->attach($product['product_id'], [
                     'quantity' => $product['quantity'],
                     'price' => $price * $product['quantity'],
+                    'created_by' => auth()->user()->name
                 ]);
 
                 // ProductTransaction::create([

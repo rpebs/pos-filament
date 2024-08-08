@@ -10,7 +10,7 @@ class Transaction extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['total_price', 'amount_given', 'change'];
+    protected $fillable = ['total_price', 'amount_given', 'change', 'created_by'];
 
     public function products()
     {

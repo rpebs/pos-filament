@@ -8,7 +8,7 @@ class ProductTransaction extends Pivot
 {
     protected $table = 'product_transaction';
 
-    protected $fillable = ['product_id', 'transaction_id', 'quantity', 'price'];
+    protected $fillable = ['product_id', 'transaction_id', 'quantity', 'price', 'created_by'];
 
     public function products()
     {
